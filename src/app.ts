@@ -1,21 +1,25 @@
-import express, { Application } from 'express';
-import helmet from 'helmet';
+import Web3 from 'web3';
+import { nft } from './controllers/nft.controller';
+import { marketplace } from './controllers/marketplace.controller';
+import mongoose from 'mongoose';
+import fetchData from './helper/fetch.helper';
 
-const { ACCESS_ORIGIN, PORT } = process.env;
+const { PROVIDER, INFURA_API_KEY } = process.env;
 
-const app: Application = express();
+const web3 = new Web3(
+  PROVIDER || `wss://sepolia.infura.io/ws/v3/${INFURA_API_KEY}`
+);
 
-app.use(helmet());
-app.use(express.json());
+(async () => {
+  try {
+    nft(web3);
+    marketplace(web3);
 
-app.use((req, res, next) => {
-  res.header({ 'Access-Control-Allow-Origin': ACCESS_ORIGIN });
-  res.header({ 'Access-Control-Allow-Methods': 'GET, POST' });
-  res.header({ 'Access-Control-Allow-Headers': 'Content-Type' });
-
-  next();
-});
-
-app.listen(PORT || 3000, () => {
-  console.log(`Server running at port: ${PORT}`);
-});
+    await mongoose.connect(
+      'mongodb+srv://raheem:raheem@cluster0.u4041.mongodb.net/NFT_collection'
+    );
+    console.log(`Connected to mongoDB`);
+  } catch (error) {
+    console.error(error);
+  }
+})();
