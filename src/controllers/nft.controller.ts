@@ -16,12 +16,15 @@ export const nft = (web3: Web3) => {
 
   sub.on('data', async (event) => {
     const { to, tokenId }: Transfer = event.returnValues as any;
-    const data: Promise<INFT> = fetchData(
+    const data: INFT = await fetchData(
       `https://ipfs.io/ipfs/QmZcH4YvBVVRJtdn4RdbaqgspFU8gH6P9vomDpBVpAL3u4/${tokenId}`
     );
+
     const nft: HydratedDocument<INFT> = new NFT({ ...data, owner: to });
 
-    nft.save();
+    await nft.save();
+
+    console.log('NFT: Created!');
   });
 
   sub.on('error', (err: any) => {

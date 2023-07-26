@@ -1,8 +1,7 @@
-import Web3 from 'web3';
-import { nft } from './controllers/nft.controller';
-import { marketplace } from './controllers/marketplace.controller';
 import mongoose from 'mongoose';
-import fetchData from './helper/fetch.helper';
+import Web3 from 'web3';
+import { marketplace } from './controllers/marketplace.controller';
+import { nft } from './controllers/nft.controller';
 
 const { PROVIDER, INFURA_API_KEY } = process.env;
 
