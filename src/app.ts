@@ -1,14 +1,10 @@
+import express, { NextFunction, Request, Response } from 'express';
 import mongoose from 'mongoose';
 import Web3 from 'web3';
-import express, {
-  ErrorRequestHandler,
-  NextFunction,
-  Request,
-  Response,
-} from 'express';
 
-import { marketplace } from './controllers/marketplace.controller';
-import { nft } from './controllers/nft.controller';
+import { marketplace } from './subscriptions/marketplace.subscription';
+import { nft } from './subscriptions/nft.subscription';
+import { CustomError } from './models/error.model';
 import marketplaceRouter from './routers/marketplace.router';
 
 const { PORT, ORIGIN, PROVIDER, INFURA_API_KEY } = process.env;
@@ -36,14 +32,11 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
 app.use(marketplaceRouter);
 
-app.use((error: any, req: Request, res: Response, next: NextFunction) => {
+app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
+  const { message, statusCode = 500, data }: CustomError = error;
+
+  res.status(statusCode).json({ message, data });
   console.log(error);
-
-  const status = error.statusCode || 500;
-  const message = error.message;
-  const data = error.data;
-
-  res.status(status).json({ message: message, data: data });
 });
 
 (async () => {

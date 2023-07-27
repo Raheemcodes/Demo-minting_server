@@ -1,28 +1,43 @@
-import Web3 from 'web3/lib/types';
-import NFTMarketPlaceAbi from '../helper/NFTMarketPlaceAbi.helper';
+import { NextFunction, Request, Response } from 'express';
+import { Result, ValidationError, validationResult } from 'express-validator';
+import { handleReqError } from '../middlewares/error.helper';
 import NFT from '../models/NFT.model';
-import { ListCreated } from '../models/app.model';
 
-const { MARKETPLACE_ADDRESS } = process.env;
+export const getTokens = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const errors: Result<ValidationError> = validationResult(req);
+    if (!errors.isEmpty()) throw handleReqError(errors);
 
-export const marketplace = (web3: Web3) => {
-  const contract = new web3.eth.Contract(
-    NFTMarketPlaceAbi,
-    MARKETPLACE_ADDRESS
-  );
+    const { skip, limit } = req.query;
+    const nfts = await NFT.find()
+      .sort({ price: 'asc' })
+      .skip(+skip!)
+      .limit(+limit!);
 
-  const sub = contract.events.ListCreated();
+    res.status(200).json({ msg: 'Tokens fetch Successful', nfts });
+  } catch (err) {
+    next(err);
+  }
+};
 
-  sub.on('data', async (event) => {
-    const { seller, price }: ListCreated = event.returnValues as any;
-    const nft = await NFT.findOne({ owner: seller });
+export const getProfileTokens = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const errors: Result<ValidationError> = validationResult(req);
+    if (!errors.isEmpty()) throw handleReqError(errors);
 
-    nft!.price = Number(price);
+    const { owner } = req.params;
+    const nfts = await NFT.find({ owner }).sort({ price: 'desc' });
 
-    nft?.save();
-  });
-
-  sub.on('error', (err: any) => {
-    console.error(err);
-  });
+    res.status(200).json({ msg: 'Tokens fetch Successful', nfts });
+  } catch (err) {
+    next(err);
+  }
 };
