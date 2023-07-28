@@ -20,7 +20,10 @@ export const nft = (web3: Web3) => {
       `https://ipfs.io/ipfs/QmZcH4YvBVVRJtdn4RdbaqgspFU8gH6P9vomDpBVpAL3u4/${tokenId}`
     );
 
-    const nft: HydratedDocument<INFT> = new NFT({ ...data, owner: to });
+    const nft: HydratedDocument<INFT> = new NFT({
+      ...data,
+      owner: to.toLowerCase(),
+    });
 
     await nft.save();
 
