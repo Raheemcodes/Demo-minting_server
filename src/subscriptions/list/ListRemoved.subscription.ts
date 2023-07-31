@@ -15,7 +15,7 @@ const ListRemoved = (contract: Contract<typeof NFTMarketPlaceAbi>) => {
     nft!.price = undefined;
 
     nft?.save();
-    console.log(`tokenId: ${tokenId} UnListed!`);
+    console.log(`tokenId: ${tokenId} Unlisted!`);
   });
 
   sub.on('error', (err: any) => {
