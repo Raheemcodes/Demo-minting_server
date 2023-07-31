@@ -15,7 +15,7 @@ export const marketplace = (web3: Web3) => {
 
   sub.on('data', async (event) => {
     const { seller, price }: ListCreated = event.returnValues as any;
-    const nft = await NFT.findOne({ owner: seller });
+    const nft = await NFT.findOne({ owner: seller.toLowerCase() });
 
     nft!.price = Number(price);
 

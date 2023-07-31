@@ -5,7 +5,6 @@ export interface Transfer {
 }
 
 export interface ListCreated {
-  nft: string;
   seller: string;
   tokenId: bigint;
   price: bigint;
