@@ -4,8 +4,13 @@ export interface Transfer {
   tokenId: bigint;
 }
 
-export interface ListCreated {
+export interface IListCreated {
   seller: string;
   tokenId: bigint;
   price: bigint;
+}
+
+export interface IListRemoved {
+  seller: string;
+  tokenId: number;
 }

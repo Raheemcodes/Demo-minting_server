@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { Result, ValidationError, validationResult } from 'express-validator';
-import { handleReqError } from '../middlewares/error.helper';
+import { handleReqError } from '../helpers/error.helper';
 import NFT from '../models/NFT.model';
 
 export const getTokens = async (

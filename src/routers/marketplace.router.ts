@@ -4,7 +4,7 @@ import {
   getProfileTokens,
   getTokens,
 } from '../controllers/marketplace.controller';
-import { handleError } from '../middlewares/error.helper';
+import { handleError } from '../helpers/error.helper';
 import NFT from '../models/NFT.model';
 import { validator } from 'web3';
 
