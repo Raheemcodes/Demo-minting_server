@@ -14,3 +14,10 @@ export interface IListRemoved {
   seller: string;
   tokenId: number;
 }
+
+export interface IListPurchased {
+  seller: string;
+  buyer: string;
+  tokenId: bigint;
+  price: bigint;
+}

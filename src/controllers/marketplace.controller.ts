@@ -24,6 +24,28 @@ export const getTokens = async (
   }
 };
 
+export const getListedTokens = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const errors: Result<ValidationError> = validationResult(req);
+    if (!errors.isEmpty()) throw handleReqError(errors);
+
+    const { skip, limit } = req.query;
+    const nfts = await NFT.find({ price: { $exists: true } })
+
+      .sort({ price: 'asc' })
+      .skip(+skip!)
+      .limit(+limit!);
+
+    res.status(200).json({ msg: 'Tokens fetch Successful', nfts });
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const getProfileTokens = async (
   req: Request,
   res: Response,

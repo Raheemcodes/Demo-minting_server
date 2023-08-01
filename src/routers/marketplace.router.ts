@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { param, query } from 'express-validator';
 import {
+  getListedTokens,
   getProfileTokens,
   getTokens,
 } from '../controllers/marketplace.controller';
@@ -26,6 +27,26 @@ marketplaceRouter.get(
       .custom((value) => value > 0),
   ],
   getTokens
+);
+
+marketplaceRouter.get(
+  '/listings',
+  [
+    query('skip', 'INVALID_SKIP')
+      .trim()
+      .isNumeric()
+      .custom(async (value) => {
+        const count: number = await NFT.countDocuments({
+          price: { $exists: true },
+        });
+        if (value >= count) throw handleError('EXCEED_COUNT', 422);
+      }),
+    query('limit', 'INVALID_LIMIT')
+      .trim()
+      .isNumeric()
+      .custom((value) => value > 0),
+  ],
+  getListedTokens
 );
 
 marketplaceRouter.get(
