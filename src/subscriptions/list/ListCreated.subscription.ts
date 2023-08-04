@@ -9,7 +9,7 @@ const ListCreated = (contract: Contract<typeof NFTMarketPlaceAbi>) => {
   sub.on('data', async (event) => {
     const { seller, tokenId, price }: IListCreated = event.returnValues as any;
     const nft = await NFT.findOne({
-      name: `Azuki #${tokenId}`,
+      name: `Nakamigos #${tokenId}`,
       owner: seller.toLowerCase(),
     });
     nft!.price = Number(price);

@@ -10,7 +10,7 @@ const ListPurchased = (contract: Contract<typeof NFTMarketPlaceAbi>) => {
     const { seller, tokenId, buyer }: IListPurchased =
       event.returnValues as any;
     const nft = await NFT.findOne({
-      name: `Azuki #${tokenId}`,
+      name: `Nakamigos #${tokenId}`,
       owner: seller.toLowerCase(),
     });
 

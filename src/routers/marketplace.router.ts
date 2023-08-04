@@ -39,7 +39,7 @@ marketplaceRouter.get(
         const count: number = await NFT.countDocuments({
           price: { $exists: true },
         });
-        if (value >= count) throw handleError('EXCEED_COUNT', 422);
+        if (+value && +value >= count) throw handleError('EXCEED_COUNT', 422);
       }),
     query('limit', 'INVALID_LIMIT')
       .trim()
