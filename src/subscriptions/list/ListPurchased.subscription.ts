@@ -3,6 +3,8 @@ import NFTMarketPlaceAbi from '../../helpers/NFTMarketPlaceAbi.helper';
 import NFT from '../../models/NFT.model';
 import { IListPurchased } from '../../models/marketplace.model';
 
+const { ART_NAME } = process.env;
+
 const ListPurchased = (contract: Contract<typeof NFTMarketPlaceAbi>) => {
   const sub = contract.events.ListPurchased();
 
@@ -10,7 +12,7 @@ const ListPurchased = (contract: Contract<typeof NFTMarketPlaceAbi>) => {
     const { seller, tokenId, buyer }: IListPurchased =
       event.returnValues as any;
     const nft = await NFT.findOne({
-      name: `Nakamigos #${tokenId}`,
+      name: `${ART_NAME} #${tokenId}`,
       owner: seller.toLowerCase(),
     });
 
