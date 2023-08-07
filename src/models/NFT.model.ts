@@ -8,8 +8,9 @@ export interface INFT {
     next?: string;
     prev?: string;
   };
-  owner: string;
+  owner?: string;
   price?: number;
+  mintedAt?: Date;
 }
 
 const nftSchema = new Schema<INFT>({
@@ -25,7 +26,8 @@ const nftSchema = new Schema<INFT>({
     next: String,
     prev: String,
   },
-  owner: { type: String, required: true },
+  mintedAt: Date,
+  owner: String,
   price: Number,
 });
 

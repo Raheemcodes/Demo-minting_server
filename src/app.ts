@@ -9,10 +9,8 @@ import { nft } from './subscriptions/nft.subscription';
 import { CustomError } from './models/error.model';
 import marketplaceRouter from './routers/marketplace.router';
 import nftRouter from './routers/nft.router';
-import fetchData from './helpers/fetch.helper';
-import NFT, { INFT } from './models/NFT.model';
 
-const { PORT, BASE_URI, ORIGIN, PROVIDER, INFURA_API_KEY } = process.env;
+const { PORT, ORIGIN, PROVIDER, INFURA_API_KEY } = process.env;
 
 const app = express();
 const web3 = new Web3(
@@ -37,8 +35,8 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-app.use(nftRouter);
 app.use(marketplaceRouter);
+app.use(nftRouter);
 
 app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
   const { message, statusCode = 500, data }: CustomError = error;
@@ -47,40 +45,24 @@ app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
   console.log(error);
 });
 
-(async () => {
+export const connectToDB = async (): Promise<string | undefined> => {
   try {
-    // nft(web3);
-    // marketplace(web3);
+    nft(web3);
+    marketplace(web3);
 
     await mongoose.connect(
       'mongodb+srv://raheem:raheem@cluster0.u4041.mongodb.net/NFT_collection'
     );
-
-    const nfts: Promise<INFT>[] = [];
-
-    for (let i = 0; i < 100; i++) {
-      nfts[i] = fetchData(`${BASE_URI}/${i}`);
-    }
-
-    const data = (await Promise.all(nfts)).map((nft) => {
-      const mappedNFT: INFT = {
-        name: nft.name,
-        image: nft.image,
-        attributes: nft.attributes,
-      };
-      return mappedNFT;
+    app.listen(PORT, () => {
+      console.log(`Server running at Port: ${PORT}`);
     });
 
-    await NFT.insertMany(data);
-
-    console.log('Done');
-
-    // app.listen(PORT, () => {
-    //   console.log(`Server running at Port: ${PORT}`);
-    // });
+    return 'Connected to DB';
   } catch (error) {
     console.error(error);
   }
-})();
+};
+
+connectToDB();
 
 export default app;
