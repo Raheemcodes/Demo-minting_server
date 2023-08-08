@@ -1,14 +1,13 @@
+import { HydratedDocument } from 'mongoose';
 import Web3 from 'web3/lib/types';
-import AzukiDemoAbi from '../helpers/AzukiDemoAbi.helper';
-import fetchData from '../helpers/fetch.helper';
+import NFTDemoAbi from '../helpers/NFTDemoAbi.helper';
 import NFT, { INFT } from '../models/NFT.model';
 import { Transfer } from '../models/marketplace.model';
-import { HydratedDocument } from 'mongoose';
 
 const { DEFAULT_ADDRESS, NFT_ADDRESS, ART_NAME } = process.env;
 
 export const nft = (web3: Web3) => {
-  const contract = new web3.eth.Contract(AzukiDemoAbi, NFT_ADDRESS);
+  const contract = new web3.eth.Contract(NFTDemoAbi, NFT_ADDRESS);
 
   const sub = contract.events.Transfer({
     filter: { from: DEFAULT_ADDRESS },
