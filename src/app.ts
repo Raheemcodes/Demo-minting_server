@@ -10,12 +10,11 @@ import { CustomError } from './models/error.model';
 import marketplaceRouter from './routers/marketplace.router';
 import nftRouter from './routers/nft.router';
 
-const { PORT, ORIGIN, PROVIDER, INFURA_API_KEY } = process.env;
+const { PORT, ORIGIN, MONGO_USER, MONGO_PASS, MONGO_DB, PROVIDER } =
+  process.env;
 
 const app = express();
-const web3 = new Web3(
-  PROVIDER || `wss://sepolia.infura.io/ws/v3/${INFURA_API_KEY}`
-);
+const web3 = new Web3(PROVIDER);
 
 web3.provider?.on('connect', () => {
   console.log('connected!');
@@ -51,8 +50,9 @@ export const connectToDB = async (): Promise<string | undefined> => {
     marketplace(web3);
 
     await mongoose.connect(
-      'mongodb+srv://raheem:raheem@cluster0.u4041.mongodb.net/NFT_collection'
+      `mongodb+srv://${MONGO_USER}:${MONGO_PASS}@cluster0.u4041.mongodb.net/${MONGO_DB}`
     );
+
     app.listen(PORT, () => {
       console.log(`Server running at Port: ${PORT}`);
     });
@@ -62,7 +62,5 @@ export const connectToDB = async (): Promise<string | undefined> => {
     console.error(error);
   }
 };
-
-connectToDB();
 
 export default app;
