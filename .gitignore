@@ -1,6 +1,8 @@
 node_modules/
 dist/
-
+src/private/
 
 nodemon.json
 src/populate.ts
+demo-dapp-server.zip
+.env
