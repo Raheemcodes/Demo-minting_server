@@ -3,15 +3,12 @@ import mongoose from 'mongoose';
 import Web3 from 'web3';
 import compression from 'compression';
 import helmet from 'helmet';
-import dotenv from 'dotenv';
 
 import { marketplace } from './subscriptions/marketplace.subscription';
 import { nft } from './subscriptions/nft.subscription';
 import { CustomError } from './models/error.model';
 import marketplaceRouter from './routers/marketplace.router';
 import nftRouter from './routers/nft.router';
-
-dotenv.config();
 
 const { PORT, ORIGIN, MONGO_USER, MONGO_PASS, MONGO_DB, PROVIDER } =
   process.env;

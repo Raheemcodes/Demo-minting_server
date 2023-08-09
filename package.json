@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node -r dotenv/config dist/app.js",
+    "start": "pm2 start",
     "serve": "nodemon dist/app.js",
     "dev": "nodemon src/app.ts",
     "build": "tsc",
@@ -12,7 +12,7 @@
     "create": "aws lambda create-function --function-name demo-dapp-server --runtime nodejs16.x --role arn:aws:iam::052146137548:role/lambda-execution-role --zip-file fileb://demo-dapp-server.zip --handler dist/lambda.handler",
     "update": "npm run deploy && aws lambda update-function-code --function-name demo-dapp-server --zip-file fileb://demo-dapp-server.zip",
     "populate": "nodemon src/populate.ts",
-    "deploy:ec2": "npm run build && scp -i src/private/demo-dapp-server.pem -r dist .env package.json ec2-user@ec2-54-226-64-208.compute-1.amazonaws.com:/home/ec2-user/minting_site_server",
+    "deploy:ec2": "npm run build && scp -i src/private/demo-dapp-server.pem -r dist ecosystem.config.js package.json ec2-user@ec2-54-226-64-208.compute-1.amazonaws.com:/home/ec2-user/minting_site_server",
     "test": "jest --watchAll"
   },
   "author": "Raheem",
@@ -20,7 +20,6 @@
   "dependencies": {
     "@vendia/serverless-express": "^4.10.4",
     "compression": "^1.7.4",
-    "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-validator": "^7.0.1",
     "helmet": "^7.0.0",

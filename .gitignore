@@ -6,3 +6,4 @@ nodemon.json
 src/populate.ts
 demo-dapp-server.zip
 .env
+ecosystem.config.js
